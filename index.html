@@ -1,13 +1,329 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>AI Engineering Skills Map — Using Coding Agents</title>
-<link rel="canonical" href="https://ming050823.github.io/ai-engineering-skills-map/"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AI Engineering Skills Map — Using Coding Agents | Claude Code × Codex</title>
+  <style>
+    :root {
+      --bg: #f6f3ee;
+      --paper: #fffcf7;
+      --ink: #1c1915;
+      --muted: #5f584e;
+      --line: #e4ddd3;
+      --accent: #b45309;
+      --accent-soft: #f3e4d0;
+      --ok: #166534;
+      --card: #fff;
+      --shadow: 0 10px 30px rgba(28, 25, 21, 0.06);
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      font-family: "Iwanami Mincho", "Source Han Serif TC", "Noto Serif TC", "Songti TC", Georgia, serif;
+      background:
+        radial-gradient(1200px 500px at 10% -10%, #fde8c8 0%, transparent 50%),
+        var(--bg);
+      color: var(--ink);
+      line-height: 1.65;
+    }
+    .wrap { max-width: 1080px; margin: 0 auto; padding: 32px 20px 80px; }
+    header.hero {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: 36px 36px 28px;
+      box-shadow: var(--shadow);
+    }
+    .kicker {
+      font-family: ui-sans-serif, system-ui, sans-serif;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      font-size: 11px;
+      color: var(--accent);
+      font-weight: 700;
+      margin: 0 0 10px;
+    }
+    h1 {
+      font-size: clamp(28px, 4vw, 42px);
+      line-height: 1.2;
+      margin: 0 0 12px;
+      font-weight: 700;
+    }
+    .sub { color: var(--muted); font-size: 16px; margin: 0 0 22px; max-width: 46em; }
+    .meta {
+      display: flex; flex-wrap: wrap; gap: 8px 10px;
+      font-family: ui-sans-serif, system-ui, sans-serif;
+      font-size: 12px;
+    }
+    .pill {
+      background: var(--accent-soft);
+      color: #7c2d12;
+      border-radius: 999px;
+      padding: 5px 10px;
+    }
+    .toolbar {
+      display: flex; justify-content: space-between; align-items: center;
+      gap: 12px; flex-wrap: wrap; margin-top: 22px;
+    }
+    .lang {
+      display: inline-flex; background: #fff; border: 1px solid var(--line);
+      border-radius: 999px; overflow: hidden;
+      font-family: ui-sans-serif, system-ui, sans-serif;
+    }
+    .lang button {
+      border: 0; background: transparent; padding: 8px 14px; cursor: pointer;
+      font-weight: 650; color: var(--muted);
+    }
+    .lang button.active { background: var(--ink); color: #fff; }
+    nav.toc {
+      margin: 22px 0 0;
+      font-family: ui-sans-serif, system-ui, sans-serif;
+      font-size: 13px;
+    }
+    nav.toc a { color: var(--muted); text-decoration: none; margin-right: 14px; }
+    nav.toc a:hover { color: var(--ink); }
+    section {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 28px 28px 22px;
+      margin-top: 18px;
+      box-shadow: var(--shadow);
+    }
+    h2 { font-size: 24px; margin: 0 0 8px; }
+    h3 { font-size: 18px; margin: 22px 0 8px; }
+    p { margin: 0 0 12px; }
+    .muted { color: var(--muted); }
+    a { color: #9a3412; }
+    ul, ol { margin: 0 0 12px; padding-left: 1.2em; }
+    li { margin: 0 0 6px; }
+    .note {
+      background: #fff7ed;
+      border-left: 4px solid var(--accent);
+      padding: 12px 14px;
+      border-radius: 0 10px 10px 0;
+      margin: 14px 0;
+      font-size: 15px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: ui-sans-serif, system-ui, sans-serif;
+      font-size: 13.5px;
+      margin: 12px 0 6px;
+    }
+    th, td {
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+      padding: 10px 8px;
+    }
+    th { font-size: 12px; letter-spacing: 0.03em; color: #7c2d12; background: #faf6f0; }
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 14px 14px 10px;
+      background: #fffaf3;
+    }
+    .card h3 { margin: 0 0 6px; font-size: 16px; }
+    code, .mono {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.92em;
+      background: #f3eee6;
+      padding: 1px 5px;
+      border-radius: 5px;
+    }
+    footer {
+      margin-top: 28px;
+      color: var(--muted);
+      font-family: ui-sans-serif, system-ui, sans-serif;
+      font-size: 12px;
+    }
+    .zh, .en, .zh-inline, .en-inline { display: none !important; }
+    html[data-lang="zh"] h1.zh,
+    html[data-lang="zh"] h2.zh,
+    html[data-lang="zh"] h3.zh,
+    html[data-lang="zh"] p.zh,
+    html[data-lang="zh"] div.zh,
+    html[data-lang="zh"] ul.zh,
+    html[data-lang="zh"] ol.zh,
+    html[data-lang="zh"] section .zh { display: block !important; }
+    html[data-lang="en"] h1.en,
+    html[data-lang="en"] h2.en,
+    html[data-lang="en"] h3.en,
+    html[data-lang="en"] p.en,
+    html[data-lang="en"] div.en,
+    html[data-lang="en"] ul.en,
+    html[data-lang="en"] ol.en,
+    html[data-lang="en"] section .en { display: block !important; }
+    html[data-lang="zh"] li.zh,
+    html[data-lang="en"] li.en { display: list-item !important; }
+    html[data-lang="zh"] th.zh,
+    html[data-lang="zh"] td.zh,
+    html[data-lang="en"] th.en,
+    html[data-lang="en"] td.en { display: table-cell !important; }
+    html[data-lang="zh"] .zh-inline,
+    html[data-lang="en"] .en-inline { display: inline !important; }
+    html[data-lang="zh"] span.zh,
+    html[data-lang="en"] span.en { display: inline !important; }
+    @media (max-width: 800px) {
+      header.hero, section { padding: 22px 16px; }
+      .grid-3 { grid-template-columns: 1fr; }
+      table { display: block; overflow-x: auto; }
+    }
+    @media print {
+      body { background: #fff; }
+      header.hero, section { box-shadow: none; }
+      .toolbar { display: none; }
+    }
+  </style>
 </head>
 <body>
-<p>Uploading full page next.</p>
-<p><a href="https://github.com/Ming050823/ai-engineering-skills-map">repo</a></p>
+  <div class="wrap">
+    <header class="hero">
+      <p class="kicker">Andrew Ng · AI Engineering Skills Map · Part 4</p>
+      <h1 class="zh">使用 Coding Agent 的五項核心能力<br />與 Claude Code / Codex 對照</h1>
+      <h1 class="en">Five Skills for Using Coding Agents<br />Mapped to Claude Code and Codex</h1>
+      <p class="sub zh">整理自 2026 年 9 月 4 日 Andrew Ng 信件《The AI Engineering Skills Map Part 4 — Coding Agents》，以及後續把五項能力對到日常 Claude Code 與 OpenAI Codex 操作的討論。本文為對話整理與摘要，非正式原文轉載。</p>
+      <p class="sub en">Compiled from Andrew Ng’s 4 September 2026 letter, <em>The AI Engineering Skills Map Part 4 — Coding Agents</em>, plus a later mapping of those five skills onto everyday Claude Code and OpenAI Codex practice. This page is a conversation digest, not a reprint of the original letter.</p>
+      <div class="meta">
+        <span class="pill">Sep 4, 2026</span>
+        <span class="pill">DeepLearning.AI / The Batch</span>
+        <span class="pill">Claude Code × OpenAI Codex</span>
+        <span class="pill zh-inline">對話整理 · 2026-09-15</span>
+        <span class="pill en-inline">Conversation digest · 2026-09-15</span>
+      </div>
+      <div class="toolbar">
+        <div class="lang" role="group" aria-label="Language">
+          <button type="button" id="btn-zh" class="active" onclick="setLang('zh')">中文</button>
+          <button type="button" id="btn-en" onclick="setLang('en')">English</button>
+        </div>
+        <nav class="toc">
+          <a href="#sources">Sources</a>
+          <a href="#workflow">Workflow</a>
+          <a href="#skills">Skills</a>
+          <a href="#matrix">Matrix</a>
+          <a href="#daily">Daily loop</a>
+        </nav>
+      </div>
+    </header>
+    <section id="sources">
+      <h2 class="zh">1. 出處與版權說明</h2>
+      <h2 class="en">1. Sources and copyright</h2>
+      <div class="zh">
+        <p>正式標題：<strong>The AI Engineering Skills Map Part 4 — Coding Agents: How to Use Coding Agents Effectively from Planning to Execution and Monitoring</strong>。</p>
+        <p>這是系列第四篇。前三篇分別是總覽、Building and deploying AI applications、Software engineering fundamentals；9 月 11 日的下一篇是 Shaping the build。</p>
+        <ul>
+          <li>DeepLearning.AI / The Batch：<a href="https://www.deeplearning.ai/the-batch/the-ai-engineering-skills-map-in-detail-using-coding-agents">official letter</a></li>
+          <li>Andrew Ng 寫作頁：<a href="https://www.andrewng.org/writing">andrewng.org/writing</a></li>
+          <li>X 同日版本：<a href="https://x.com/AndrewYNg/status/2095890279865721217">@AndrewYNg</a></li>
+        </ul>
+        <div class="note">原文受著作權保護，此頁只提供結構完整的摘要與實作對照，不轉載全文。</div>
+      </div>
+      <div class="en">
+        <p>Official title: <strong>The AI Engineering Skills Map Part 4 — Coding Agents</strong>.</p>
+        <p>This is part 4 of the series. The original letter is copyrighted; this page is a structured digest plus a practical mapping.</p>
+        <ul>
+          <li><a href="https://www.deeplearning.ai/the-batch/the-ai-engineering-skills-map-in-detail-using-coding-agents">DeepLearning.AI letter</a></li>
+          <li><a href="https://www.andrewng.org/writing">andrewng.org/writing</a></li>
+          <li><a href="https://x.com/AndrewYNg/status/2095890279865721217">X post</a></li>
+        </ul>
+      </div>
+    </section>
+    <section id="workflow">
+      <h2 class="zh">2. 高階工作流：規劃 → 執行 → 部署監控</h2>
+      <h2 class="en">2. High-level workflow: plan → execute → deploy and monitor</h2>
+      <p class="zh muted">工作重心從「寫程式」轉向「決定做什麼、設計架構、寫 spec、驗證輸出」。</p>
+      <p class="en muted">Effort shifts away from writing code toward deciding what to build, designing architecture, writing a spec, and verifying output.</p>
+      <div class="grid-3">
+        <article class="card"><h3 class="zh">Planning 規劃</h3><h3 class="en">Planning</h3><p class="zh">腦力激盪 → spec → 執行計畫。檢視假設、安全與過度設計。</p><p class="en">Brainstorm, write a spec, then generate an execution plan. Interrogate assumptions, security, and overengineering.</p></article>
+        <article class="card"><h3 class="zh">Execution 執行</h3><h3 class="en">Execution</h3><p class="zh">讓 agent 建、測、驗證。關鍵是自主程度與人工監督的平衡。</p><p class="en">Have the agent build, test, and verify, balancing autonomy with oversight.</p></article>
+        <article class="card"><h3 class="zh">Deploy & monitor</h3><h3 class="en">Deploy & monitor</h3><p class="zh">部署後用 agent 看 log、找問題、提出並執行改進。</p><p class="en">Deploy, then use agents to watch logs, surface issues, and apply improvements.</p></article>
+      </div>
+    </section>
+    <section id="skills">
+      <h2 class="zh">3. 五項核心能力</h2>
+      <h2 class="en">3. The five core skills</h2>
+      <h3>3.1 Directing the workflow</h3>
+      <p class="zh">決定每一步花多少人力與 agent 時間，以及何時退回前一步。</p>
+      <p class="en">Decide how much human and agent effort each step deserves, and when to iterate backward.</p>
+      <h3>3.2 Enabling agent autonomy</h3>
+      <p class="zh">選自主層級、管 context、決定並行，並用權限與閘門保安全。</p>
+      <p class="en">Choose autonomy, manage context, run agents in parallel when useful, and set safe permissions.</p>
+      <h3>3.3 Reviewing the work</h3>
+      <p class="zh">用測試、審查與證據判斷「做完了」。不要讓實作方自己改弱測試。</p>
+      <p class="en">Use tests, review, and evidence to decide done. Never let the implementer weaken the verifier.</p>
+      <h3>3.4 Customizing the agent and its environment</h3>
+      <p class="zh">維護 <code>AGENTS.md</code> / <code>CLAUDE.md</code>、skills、hooks、MCP。</p>
+      <p class="en">Maintain <code>AGENTS.md</code> / <code>CLAUDE.md</code>, skills, hooks, and MCP servers.</p>
+      <h3>3.5 Coding agent foundations</h3>
+      <p class="zh">看懂 search、context、tool、subagent 與失敗模式，才能及時介入。</p>
+      <p class="en">Understand search, context, tools, subagents, and failure modes so you can intervene.</p>
+    </section>
+    <section id="matrix">
+      <h2 class="zh">4. 五項能力 × Claude Code / Codex</h2>
+      <h2 class="en">4. Skills × Claude Code / Codex</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Skill</th>
+            <th class="zh">你在做什麼</th><th class="en">What you are doing</th>
+            <th>Claude Code</th>
+            <th>Codex</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>1. Directing the workflow</td><td class="zh">先規劃或直接做、spec 寫多細、何時回頭</td><td class="en">Plan first or implement, spec depth, when to loop back</td><td>Plan mode; Explore / Plan agents</td><td><code>/plan</code>, <code>/goal</code></td></tr>
+          <tr><td>2. Enabling agent autonomy</td><td class="zh">互動程度、並行、權限</td><td class="en">Interactivity, parallelism, permissions</td><td>Permissions, subagents, hooks</td><td>Approval / sandbox, <code>/permissions</code></td></tr>
+          <tr><td>3. Reviewing the work</td><td class="zh">測、審、證據</td><td class="en">Test, review, evidence of done</td><td>Tests, agentic review</td><td><code>/review</code>, PR review, browser checks</td></tr>
+          <tr><td>4. Customizing environment</td><td class="zh">讓下次不用重講規則</td><td class="en">Stop re-explaining rules</td><td><code>CLAUDE.md</code>, Skills, hooks, MCP</td><td><code>AGENTS.md</code>, Skills, hooks, MCP</td></tr>
+          <tr><td>5. Agent foundations</td><td class="zh">看懂走偏並介入</td><td class="en">See drift and intervene</td><td><code>/compact</code>, isolated subagents</td><td><code>/compact</code>, sandbox, goal check</td></tr>
+        </tbody>
+      </table>
+      <h3 class="zh">起手式</h3>
+      <h3 class="en">Starting move</h3>
+      <p class="zh">先寫好 repo 根目錄的 <code>AGENTS.md</code>（Claude 再加 <code>CLAUDE.md</code>）：test 指令與禁區。這一檔同時服務五項能力。</p>
+      <p class="en">Write test commands and off-limits paths into root <code>AGENTS.md</code> (plus <code>CLAUDE.md</code> for Claude). That single file serves all five skills.</p>
+    </section>
+    <section id="daily">
+      <h2 class="zh">5. 日常流程</h2>
+      <h2 class="en">5. Daily loop</h2>
+      <ol class="zh">
+        <li><strong>Planning。</strong> Plan mode 或 <code>/plan</code> → spec + 分步驗證。</li>
+        <li><strong>Execution。</strong> 小改互動；大改用 goal + 測試迴圈。</li>
+        <li><strong>Review。</strong> 換角色審；測試由你指定。</li>
+        <li><strong>Customize。</strong> 反復糾正寫進 md / skill / hook。</li>
+        <li><strong>Monitor。</strong> 部署後看 log，再走 plan → patch → verify。</li>
+      </ol>
+      <ol class="en">
+        <li><strong>Planning.</strong> Plan mode or <code>/plan</code> → spec plus a verifier per step.</li>
+        <li><strong>Execution.</strong> Stay interactive on small edits; use a goal plus tests on larger work.</li>
+        <li><strong>Review.</strong> Change roles. You specify the tests.</li>
+        <li><strong>Customize.</strong> Promote recurring corrections into markdown, a skill, or a hook.</li>
+        <li><strong>Monitor.</strong> Watch logs after deploy; re-enter plan → patch → verify.</li>
+      </ol>
+    </section>
+    <footer>
+      <p class="zh">整理日期：2026-09-15。來源：Andrew Ng / DeepLearning.AI 公開信件與工具公開文件。此頁為對話備忘，非正式出版物。</p>
+      <p class="en">Compiled 15 September 2026 from public letters and tool docs. Conversation memo, not an official publication.</p>
+    </footer>
+  </div>
+  <script>
+    function setLang(lang) {
+      document.documentElement.setAttribute("data-lang", lang);
+      document.documentElement.lang = lang === "zh" ? "zh-Hant" : "en";
+      document.getElementById("btn-zh").classList.toggle("active", lang === "zh");
+      document.getElementById("btn-en").classList.toggle("active", lang === "en");
+      try { localStorage.setItem("skills-map-lang", lang); } catch (e) {}
+    }
+    setLang(localStorage.getItem("skills-map-lang") || "zh");
+  </script>
 </body>
 </html>
